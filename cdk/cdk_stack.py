@@ -2,9 +2,11 @@ from aws_cdk import (
     aws_iam as iam,
     aws_sqs as sqs,
     aws_sns as sns,
+    aws_ec2 as ec2,
     aws_sns_subscriptions as subs,
     core
 )
+
 
 
 class CdkStack(core.Stack):
@@ -28,9 +30,11 @@ class CdkStack(core.Stack):
             topic.add_subscription(subs.SqsSubscription(queue))
         else:
             print("Check your queue name pls")
+            exit(1)
     
     def check_name_of_queue(self, name):
         if "my" in name :
             return False
         else:
             return True
+

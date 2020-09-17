@@ -3,14 +3,14 @@
 from aws_cdk import core
 from cdk.cdk_stack import CdkStack
 from cdk.vpc_stack import VPCStack
+from cdk.serverless_stack import LambdaStack
+from cdk.secret_utils import secrets
 
-import sys
+if __name__ == "__main__":
 
-vpc_app = core.App()
-VPCStack(vpc_app, "VpcStack", env={'region': 'eu-central-1'}, vpc_name="platformvpc")
-vpc_app.synth()
+    app = core.App()
+    secretOut = secrets.getSecret()
+    vpcObj = VPCStack(app, "VpcStack", env={'region': 'eu-central-1'}, vpc_name="platformvpc").getVpcObject()
+    LambdaStack(app, "LambdaStack", env={'region': 'eu-central-1'}, vpc=vpcObj, tykSecret=secretOut)
 
-
-app = core.App()
-CdkStack(app, "CdkStack", env={'region': 'eu-central-1'}, queue_name="my_queue")
-app.synth()
+    app.synth()
